@@ -1,0 +1,16 @@
+﻿<Application x:Class="JarmuKolcsonzo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:JarmuKolcsonzo"
+             xmlns:views="clr-namespace:JarmuKolcsonzo.Views"
+             xmlns:viewmodels="clr-namespace:JarmuKolcsonzo.ViewModels"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:JarmuViewModel}">
+            <views:JarmuView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:UgyfelViewModel}">
+            <views:UgyfelView/>
+        </DataTemplate>
+    </Application.Resources>
+</Application>
