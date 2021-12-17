@@ -16,7 +16,6 @@ namespace JarmuKolcsonzo.ViewModels
     {
         private GenericRepository<Jarmu, JKContext> jarmuRepo;
         private ObservableCollection<Jarmu> _jarmuvek;
-
         public ObservableCollection<Jarmu> Jarmuvek
         {
             get { return _jarmuvek; }
@@ -28,8 +27,6 @@ namespace JarmuKolcsonzo.ViewModels
             get { return _searchKey; }
             set {  SetProperty(ref _searchKey, value); Search(value);}
         }
-
-        public ICollectionView JarmuvekCW { get; }
 
         public JarmuViewModel(JKContext context)
         {
