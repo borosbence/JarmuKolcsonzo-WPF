@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Menu >
+        <Menu>
             <MenuItem Header="Ügyfelek" Padding="5" Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel" />
             <MenuItem Header="Járművek" Padding="5" Command="{Binding UpdateViewCommand}" CommandParameter="Jarmu"/>
         </Menu>

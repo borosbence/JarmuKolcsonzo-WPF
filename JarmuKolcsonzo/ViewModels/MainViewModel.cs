@@ -28,6 +28,7 @@ namespace JarmuKolcsonzo.ViewModels
         {
             context = new JKContext();
             UpdateViewCommand = new RelayCommand<object>(e => Execute(e));
+            // SelectedViewModel = new UgyfelViewModel();
         }
 
         public void Execute(object parameter)
