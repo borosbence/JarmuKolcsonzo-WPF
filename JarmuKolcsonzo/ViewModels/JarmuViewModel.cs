@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
@@ -14,25 +15,21 @@ namespace JarmuKolcsonzo.ViewModels
     public class JarmuViewModel : ObservableObject
     {
         private GenericRepository<Jarmu, JKContext> jarmuRepo;
-        public ObservableCollection<Jarmu> Jarmuvek { get; set; }
+        private ObservableCollection<Jarmu> _jarmuvek;
 
-        public ICollectionView _jarmuvekCW;
-        public ICollectionView JarmuvekCW
+        public ObservableCollection<Jarmu> Jarmuvek
         {
-            get { return _jarmuvekCW; }
-            set { SetProperty(ref _jarmuvekCW, value); }
+            get { return _jarmuvek; }
+            set { SetProperty(ref _jarmuvek, value); }
         }
         private string _searchKey;
         public string SearchKey
         {
             get { return _searchKey; }
-            set 
-            { 
-                SetProperty(ref _searchKey, value);
-                JarmuvekCW.Refresh(); 
-            }
+            set {  SetProperty(ref _searchKey, value); Search(value);}
         }
 
+        public ICollectionView JarmuvekCW { get; }
 
         public JarmuViewModel(JKContext context)
         {
@@ -40,16 +37,14 @@ namespace JarmuKolcsonzo.ViewModels
             Jarmuvek = new ObservableCollection<Jarmu>(jarmuRepo.GetAll());
 
             _searchKey = string.Empty;
-            JarmuvekCW = CollectionViewSource.GetDefaultView(Jarmuvek);
-            JarmuvekCW.Filter =  new Predicate<object>(Filter);
         }
 
-        public bool Filter(object obj)
+        public void Search(string searchKey)
         {
-            var search = SearchKey.ToLower();
-            Jarmu jarmu = obj as Jarmu;
-            return jarmu.rendszam.ToLower().Contains(search) || jarmu.tipus.megnevezes.ToLower().Contains(search);
+            searchKey = searchKey.ToLower();
+            Jarmuvek = new ObservableCollection<Jarmu>(jarmuRepo.GetAll().Where(x =>
+                x.rendszam.ToLower().Contains(searchKey) ||
+                x.tipus.megnevezes.ToLower().Contains(searchKey)));
         }
-
     }
 }
