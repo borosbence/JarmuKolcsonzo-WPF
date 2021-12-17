@@ -12,15 +12,15 @@
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
+        <Menu >
+            <MenuItem Header="Ügyfelek" Padding="5" Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel" />
+            <MenuItem Header="Járművek" Padding="5" Command="{Binding UpdateViewCommand}" CommandParameter="Jarmu"/>
+        </Menu>
 
-        <ContentControl Content="{Binding SelectedViewModel}"/>
+        <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}"/>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Margin="10" Width="200" Content="Ügyfelek" Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel"/>
-            <Button Margin="10" Width="200" Content="Járművek" Command="{Binding UpdateViewCommand}" CommandParameter="Jarmu"/>
-        </StackPanel>
     </Grid>
 </Window>

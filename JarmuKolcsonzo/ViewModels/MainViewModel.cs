@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using JarmuKolcsonzo.Models;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -19,11 +20,13 @@ namespace JarmuKolcsonzo.ViewModels
                 SetProperty(ref _selectedViewModel, value);
             }
         }
-
         public RelayCommand<object> UpdateViewCommand { get; set; }
+
+        private JKContext context;
 
         public MainViewModel()
         {
+            context = new JKContext();
             UpdateViewCommand = new RelayCommand<object>(e => Execute(e));
         }
 
@@ -35,7 +38,7 @@ namespace JarmuKolcsonzo.ViewModels
             }
             else if (parameter.ToString() == "Jarmu")
             {
-                SelectedViewModel = new JarmuViewModel();
+                SelectedViewModel = new JarmuViewModel(context);
             }
         }
     }

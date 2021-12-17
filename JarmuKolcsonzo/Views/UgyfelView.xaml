@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Label FontSize="36" HorizontalAlignment="Center" Content="Ügyfél"/>
+        <Label FontSize="24" HorizontalAlignment="Center" Content="Ügyfelek"/>
     </Grid>
 </UserControl>
