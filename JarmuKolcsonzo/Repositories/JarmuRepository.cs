@@ -8,16 +8,24 @@ using System.Threading.Tasks;
 
 namespace JarmuKolcsonzo.Repositories
 {
-    public class JarmuRepository<TContext> : GenericRepository<Jarmu, TContext> where TContext : DbContext
+    public class JarmuRepository : GenericRepository<Jarmu, JKContext>
     {
-        public JarmuRepository(TContext context) : base(context)
+        public JarmuRepository(JKContext context) : base(context)
         {
 
         }
 
-        public override List<Jarmu> GetAll()
+        public List<Jarmu> GetAll(string search = null)
         {
-            return _context.Set<Jarmu>().Include(x => x.tipus).ToList();
+            var query = _context.Jarmuvek.Include(x => x.tipus).AsQueryable();
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.ToLower();
+                query = query.Where(x =>
+                    x.rendszam.ToLower().Contains(search) ||
+                    x.tipus.megnevezes.ToLower().Contains(search));
+            }
+            return query.ToList();
         }
     }
 }

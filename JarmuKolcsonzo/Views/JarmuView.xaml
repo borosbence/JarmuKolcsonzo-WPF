@@ -4,9 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JarmuKolcsonzo.Views"
+             xmlns:vm="clr-namespace:JarmuKolcsonzo.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
+    <UserControl.DataContext>
+        <vm:JarmuViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,7 +20,7 @@
         <Label FontSize="24" HorizontalAlignment="Center" Content="Járművek"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Label Content="Keresés" />
-            <TextBox Width="200" Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="200" Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
         </StackPanel>
 
         <DataGrid Grid.Row="2" 
@@ -27,7 +31,7 @@
                 <DataGridTextColumn Header="Rendszám" Binding="{Binding rendszam}" />
                 <DataGridTextColumn Header="Díj" Binding="{Binding dij}" />
                 <DataGridCheckBoxColumn Header="Elérhető" Binding="{Binding elerheto}" />
-                <DataGridTextColumn Header="Szervíz dátum" Binding="{Binding szerviz_datum}" />
+                <DataGridTextColumn Header="Szervíz dátum" Binding="{Binding szerviz_datum, StringFormat='yyyy-MM-dd'}" />
                 <DataGridTextColumn Header="Típus" Binding="{Binding tipus.megnevezes}" />
             </DataGrid.Columns>
         </DataGrid>

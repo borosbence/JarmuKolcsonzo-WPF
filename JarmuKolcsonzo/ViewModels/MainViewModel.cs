@@ -22,11 +22,8 @@ namespace JarmuKolcsonzo.ViewModels
         }
         public RelayCommand<object> UpdateViewCommand { get; set; }
 
-        private JKContext context;
-
         public MainViewModel()
         {
-            context = new JKContext();
             UpdateViewCommand = new RelayCommand<object>(e => Execute(e));
             // SelectedViewModel = new UgyfelViewModel();
         }
@@ -39,7 +36,7 @@ namespace JarmuKolcsonzo.ViewModels
             }
             else if (parameter.ToString() == "Jarmu")
             {
-                SelectedViewModel = new JarmuViewModel(context);
+                SelectedViewModel = new JarmuViewModel();
             }
         }
     }

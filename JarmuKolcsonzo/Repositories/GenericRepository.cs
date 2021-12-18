@@ -15,12 +15,28 @@ namespace JarmuKolcsonzo.Repositories
         protected TContext _context;
         public GenericRepository(TContext context)
         {
-            this._context = context;
+            _context = context;
         }
+        public virtual List<TEntity> GetAll()
+        {
+            return _context.Set<TEntity>().ToList();
+        }
+
+        public virtual TEntity Get(int id)
+        {
+            return _context.Set<TEntity>().Find(id);   
+        }
+      
         public virtual void Add(TEntity entity)
         {
             _context.Add(entity);
             _context.SaveChanges();
+        }
+
+        public virtual void Update(TEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.SaveChangesAsync();
         }
 
         public virtual void Delete(int id)
@@ -31,22 +47,6 @@ namespace JarmuKolcsonzo.Repositories
                 _context.Remove(entity);
                 _context.SaveChanges();
             }
-        }
-
-        public virtual TEntity Get(int id)
-        {
-            return _context.Set<TEntity>().Find(id);   
-        }
-
-        public virtual List<TEntity> GetAll()
-        {
-            return _context.Set<TEntity>().ToList();
-        }
-
-        public virtual void Update(TEntity entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-            _context.SaveChangesAsync();
         }
     }
 }

@@ -6,21 +6,34 @@
         xmlns:local="clr-namespace:JarmuKolcsonzo"
         xmlns:vm="clr-namespace:JarmuKolcsonzo.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Járműkölcsönző App" Height="450" Width="800">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="MenuItem">
+            <Setter Property="Padding" Value="5" />
+        </Style>
+    </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85" MinWidth="5" MaxWidth="85"/>
+            <ColumnDefinition Width="2"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Menu>
-            <MenuItem Header="Ügyfelek" Padding="5" Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel" />
-            <MenuItem Header="Járművek" Padding="5" Command="{Binding UpdateViewCommand}" CommandParameter="Jarmu"/>
+            <Menu.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </Menu.ItemsPanel>
+            <MenuItem Header="Ügyfelek"  Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel" />
+            <MenuItem Header="Járművek" Command="{Binding UpdateViewCommand}" CommandParameter="Jarmu"/>
+            <!--<MenuItem Header="Járműtípusok" />
+            <MenuItem Header="Rendelések" />-->
         </Menu>
-
-        <ContentControl Grid.Row="1" Content="{Binding SelectedViewModel}"/>
+        <GridSplitter Grid.Column="1" Width="2" Background="Black" HorizontalAlignment="Stretch" />
+        <ContentControl Grid.Column="2" Content="{Binding SelectedViewModel}"/>
 
     </Grid>
 </Window>

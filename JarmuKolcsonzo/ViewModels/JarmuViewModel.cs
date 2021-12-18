@@ -14,7 +14,7 @@ namespace JarmuKolcsonzo.ViewModels
 {
     public class JarmuViewModel : ObservableObject
     {
-        private GenericRepository<Jarmu, JKContext> jarmuRepo;
+        private JarmuRepository jarmuRepo;
         private ObservableCollection<Jarmu> _jarmuvek;
         public ObservableCollection<Jarmu> Jarmuvek
         {
@@ -28,9 +28,10 @@ namespace JarmuKolcsonzo.ViewModels
             set {  SetProperty(ref _searchKey, value); Search(value);}
         }
 
-        public JarmuViewModel(JKContext context)
+        public JarmuViewModel()
         {
-            jarmuRepo = new JarmuRepository<JKContext>(context);
+            var context = new JKContext();
+            jarmuRepo = new JarmuRepository(context);
             Jarmuvek = new ObservableCollection<Jarmu>(jarmuRepo.GetAll());
 
             _searchKey = string.Empty;
@@ -38,10 +39,8 @@ namespace JarmuKolcsonzo.ViewModels
 
         public void Search(string searchKey)
         {
-            searchKey = searchKey.ToLower();
-            Jarmuvek = new ObservableCollection<Jarmu>(jarmuRepo.GetAll().Where(x =>
-                x.rendszam.ToLower().Contains(searchKey) ||
-                x.tipus.megnevezes.ToLower().Contains(searchKey)));
+            var query = jarmuRepo.GetAll(searchKey);
+            Jarmuvek = new ObservableCollection<Jarmu>(query);
         }
     }
 }
