@@ -41,29 +41,29 @@ namespace JarmuKolcsonzo.Repositories
             }
 
             // Sorbarendezés
-            //if (!string.IsNullOrWhiteSpace(sortBy))
-            //{
-            //    switch (sortBy)
-            //    {
-            //        case "rendszam":
-            //            query = ascending ? query.OrderBy(x => x.rendszam) : query.OrderByDescending(x => x.rendszam);
-            //            break;
-            //        case "tipus":
-            //            query = ascending ? query.OrderBy(x => x.tipus.megnevezes) : query.OrderByDescending(x => x.tipus.megnevezes);
-            //            break;
-            //        case "dij":
-            //            query = ascending ? query.OrderBy(x => x.dij) : query.OrderByDescending(x => x.dij);
-            //            break;
-            //        case "elerheto":
-            //            query = ascending ? query.OrderBy(x => x.elerheto) : query.OrderByDescending(x => x.elerheto);
-            //            break;
-            //        case "szerviz_datum":
-            //            query = ascending ? query.OrderBy(x => x.szerviz_datum) : query.OrderByDescending(x => x.szerviz_datum);
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                switch (sortBy)
+                {
+                    case "rendszam":
+                        query = ascending ? query.OrderBy(x => x.rendszam) : query.OrderByDescending(x => x.rendszam);
+                        break;
+                    case "tipus.megnevezes":
+                        query = ascending ? query.OrderBy(x => x.tipus.megnevezes) : query.OrderByDescending(x => x.tipus.megnevezes);
+                        break;
+                    case "dij":
+                        query = ascending ? query.OrderBy(x => x.dij) : query.OrderByDescending(x => x.dij);
+                        break;
+                    case "elerheto":
+                        query = ascending ? query.OrderBy(x => x.elerheto) : query.OrderByDescending(x => x.elerheto);
+                        break;
+                    case "szerviz_datum":
+                        query = ascending ? query.OrderBy(x => x.szerviz_datum) : query.OrderByDescending(x => x.szerviz_datum);
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             // Összes találat kiszámítása
             _totalItems = query.Count();

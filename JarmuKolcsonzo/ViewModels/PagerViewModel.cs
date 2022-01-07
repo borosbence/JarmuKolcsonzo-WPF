@@ -3,6 +3,7 @@ using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,31 +19,54 @@ namespace JarmuKolcsonzo.ViewModels
             set { SetProperty(ref _searchKey, value); page = 1; }
         }
 
-        private string _totalItems;
-        public string TotalItemsLabel
+        private string _sortBy;
+        public string SortBy
         {
-            get { return _totalItems; }
-            set { SetProperty(ref _totalItems, value); }
+            get { return _sortBy; }
+            set
+            {
+                SetProperty(ref _sortBy, value);
+                if (value == _sortBy)
+                {
+                    ascending = !ascending;
+                }
+                LoadData();
+            }
         }
+        protected bool ascending;
 
+        // Oldaltördelés
         private string _currentPage;
         public string CurrentPage
         {
             get { return _currentPage; }
-            set { SetProperty(ref _currentPage, value); ; }
+            set { SetProperty(ref _currentPage, value); }
         }
 
-        // Oldaltördelés
+        public ObservableCollection<int> IPPList { get; set; }
+
+        private int itemsPerPage = 20;
+        public int ItemsPerPage
+        {
+            get { return itemsPerPage; }
+            set { SetProperty(ref itemsPerPage, value); LoadData(); }
+        }
         protected int page = 1;
-        protected int itemsPerPage = 20;
         private int pageCount;
+
+        private int _totalItems;
         public int TotalItems
         {
+            get { return _totalItems; }
             set
             {
-                TotalItemsLabel = "Összesen: " + value;
                 pageCount = (value - 1) / itemsPerPage + 1;
                 CurrentPage = page + "/" + pageCount;
+                SetProperty(ref _totalItems, value);
+                if (page > pageCount)
+                {
+                    page = pageCount;
+                }
             }
         }
 
@@ -52,13 +76,6 @@ namespace JarmuKolcsonzo.ViewModels
         public RelayCommand NextPageCmd { get; set; }
         public RelayCommand LastPageCmd { get; set; }
 
-        //private string _sortBy;
-        //public string SortBy
-        //{
-        //    get { return _sortBy; }
-        //    set { SetProperty(ref _sortBy, value); }
-        //}
-
         public PagerViewModel()
         {
             LoadDataCmd = new RelayCommand(() => LoadData());
@@ -66,6 +83,7 @@ namespace JarmuKolcsonzo.ViewModels
             PreviousPageCmd = new RelayCommand(() => PrevPage());
             NextPageCmd = new RelayCommand(() => NextPage());
             LastPageCmd = new RelayCommand(() => LastPage());
+            IPPList = new ObservableCollection<int>(new List<int>() { 10, 20, 50 });
         }
 
         protected abstract void LoadData();

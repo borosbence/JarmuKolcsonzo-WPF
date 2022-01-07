@@ -82,15 +82,23 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="{Binding TotalItemsLabel}"/>
-            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Összesen: "/>
+                <TextBlock Text="{Binding TotalItems}"/>
+                <TextBlock Text=", elem per oldal: "/>
+                <ComboBox Width="100" VerticalAlignment="Top"
+                          ItemsSource="{Binding IPPList}"
+                          SelectedItem="{Binding ItemsPerPage}">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <!--<TextBox Width="200" Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />-->
                 <TextBox Width="200" Text="{Binding SearchKey}" VerticalAlignment="Center" />
                 <Button Content="Keresés" Command="{Binding LoadDataCmd}" />
             </StackPanel>
         </Grid>
 
-        <DataGrid Grid.Row="3" ColumnWidth="*"
+        <DataGrid Grid.Row="3" ColumnWidth="*" x:Name="jarmuvekDGV"
                   ItemsSource="{Binding Jarmuvek}" 
                   SelectedItem="{Binding SelectedJarmu}"
                   AutoGenerateColumns="False"

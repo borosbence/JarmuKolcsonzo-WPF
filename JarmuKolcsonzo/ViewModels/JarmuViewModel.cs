@@ -38,7 +38,7 @@ namespace JarmuKolcsonzo.ViewModels
 
         protected override void LoadData()
         {
-            var query = jarmuRepo.GetAll(page, itemsPerPage, SearchKey);
+            var query = jarmuRepo.GetAll(page, ItemsPerPage, SearchKey, SortBy, ascending);
             TotalItems = jarmuRepo.TotalItems;
             Jarmuvek = new ObservableCollection<Jarmu>(query);
         }
