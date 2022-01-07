@@ -8,32 +8,118 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
-    <UserControl.DataContext>
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </UserControl.Resources>
+    <!--<UserControl.DataContext>
         <vm:JarmuViewModel/>
-    </UserControl.DataContext>
-    <Grid>
+    </UserControl.DataContext>-->
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label FontSize="24" HorizontalAlignment="Center" Content="Járművek"/>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Label Content="Keresés" />
-            <TextBox Width="200" Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />
-        </StackPanel>
 
-        <DataGrid Grid.Row="2" 
-                  ItemsSource="{Binding Jarmuvek}"
+        <Label FontSize="24" HorizontalAlignment="Center" Content="Járművek"/>
+        <Expander Grid.Row="1" Header="Jármű részletei">
+            <Expander.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="FontSize" Value="13" />
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Width" Value="300"/>
+                    <Setter Property="Height" Value="25"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="Margin" Value="2"/>
+                </Style>
+                <Style TargetType="Button">
+                    <Setter Property="Width" Value="100"/>
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="Margin" Value="2" />
+                </Style>
+            </Expander.Resources>
+            <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Rendszám" Grid.Column="0" Grid.Row="0"/>
+                <TextBox Grid.Row="0" Grid.Column="1"
+                       Text="{Binding SelectedJarmu.rendszam}"/>
+                <Label Content="Díj" Grid.Row="1" Grid.Column="0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxAge"
+                       Text="{Binding SelectedJarmu.dij}" />
+                <Label Content="Elérhető" Grid.Row="2" Grid.Column="0" />
+                <CheckBox Grid.Row="2" Grid.Column="1" Margin="2"
+                       IsChecked="{Binding SelectedJarmu.elerheto}"/>
+                <Label Content="Szervíz Dátum" Grid.Row="3" Grid.Column="0" />
+                <DatePicker Grid.Row="3" Grid.Column="1" Width="300" HorizontalAlignment="Left" Margin="2"
+                       SelectedDate="{Binding SelectedJarmu.szerviz_datum}"/>
+                <Label Content="Típus" Grid.Row="4" Grid.Column="0"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" Width="300" HorizontalAlignment="Left" Margin="2" />
+                <Button Content="Új" Grid.Column="2" Grid.Row="0"/>
+                <Button Content="Mentés" Grid.Column="2" Grid.Row="1"/>
+                <Button Content="Törlés" Grid.Column="2" Grid.Row="2"/>
+            </Grid>
+        </Expander>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding TotalItemsLabel}"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <!--<TextBox Width="200" Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />-->
+                <TextBox Width="200" Text="{Binding SearchKey}" VerticalAlignment="Center" />
+                <Button Content="Keresés" Command="{Binding LoadDataCmd}" />
+            </StackPanel>
+        </Grid>
+
+        <DataGrid Grid.Row="3" ColumnWidth="*"
+                  ItemsSource="{Binding Jarmuvek}" 
+                  SelectedItem="{Binding SelectedJarmu}"
                   AutoGenerateColumns="False"
-                  ColumnWidth="*">
+                  CanUserAddRows="False"     
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"              
+                  SelectionMode="Single">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Rendszám" Binding="{Binding rendszam}" />
+                <DataGridTextColumn Header="Rendszám" Binding="{Binding rendszam}"/>
                 <DataGridTextColumn Header="Díj" Binding="{Binding dij}" />
                 <DataGridCheckBoxColumn Header="Elérhető" Binding="{Binding elerheto}" />
                 <DataGridTextColumn Header="Szervíz dátum" Binding="{Binding szerviz_datum, StringFormat='yyyy-MM-dd'}" />
                 <DataGridTextColumn Header="Típus" Binding="{Binding tipus.megnevezes}" />
             </DataGrid.Columns>
         </DataGrid>
+
+        <Grid Grid.Row="5" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="&lt;&lt;" Grid.Column="0"  Command="{Binding FirstPageCmd}" />
+            <Button Content="&lt;" Grid.Column="1" Command="{Binding PreviousPageCmd}" />
+            <TextBlock Text="{Binding CurrentPage}" Grid.Column="2" HorizontalAlignment="Center"/>
+            <Button Content=">" Grid.Column="3" Command="{Binding NextPageCmd}" />
+            <Button Content=">>" Grid.Column="4" Command="{Binding LastPageCmd}" />
+        </Grid>
     </Grid>
 </UserControl>

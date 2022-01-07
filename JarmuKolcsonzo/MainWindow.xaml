@@ -34,6 +34,5 @@
         </Menu>
         <GridSplitter Grid.Column="1" Width="2" Background="Black" HorizontalAlignment="Stretch" />
         <ContentControl Grid.Column="2" Content="{Binding SelectedViewModel}"/>
-
     </Grid>
 </Window>

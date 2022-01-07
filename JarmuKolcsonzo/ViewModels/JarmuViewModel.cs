@@ -5,6 +5,7 @@ using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -12,7 +13,7 @@ using System.Windows.Data;
 
 namespace JarmuKolcsonzo.ViewModels
 {
-    public class JarmuViewModel : ObservableObject
+    public class JarmuViewModel : PagerViewModel
     {
         private JarmuRepository jarmuRepo;
         private ObservableCollection<Jarmu> _jarmuvek;
@@ -21,25 +22,24 @@ namespace JarmuKolcsonzo.ViewModels
             get { return _jarmuvek; }
             set { SetProperty(ref _jarmuvek, value); }
         }
-        private string _searchKey;
-        public string SearchKey
+        private Jarmu _selectedJarmu;
+        public Jarmu SelectedJarmu
         {
-            get { return _searchKey; }
-            set {  SetProperty(ref _searchKey, value); Search(value);}
+            get { return _selectedJarmu; }
+            set { SetProperty(ref _selectedJarmu, value); }
         }
 
         public JarmuViewModel()
         {
             var context = new JKContext();
             jarmuRepo = new JarmuRepository(context);
-            Jarmuvek = new ObservableCollection<Jarmu>(jarmuRepo.GetAll());
-
-            _searchKey = string.Empty;
+            LoadData();
         }
 
-        public void Search(string searchKey)
+        protected override void LoadData()
         {
-            var query = jarmuRepo.GetAll(searchKey);
+            var query = jarmuRepo.GetAll(page, itemsPerPage, SearchKey);
+            TotalItems = jarmuRepo.TotalItems;
             Jarmuvek = new ObservableCollection<Jarmu>(query);
         }
     }

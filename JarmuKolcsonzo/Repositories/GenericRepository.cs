@@ -27,7 +27,7 @@ namespace JarmuKolcsonzo.Repositories
             return _context.Set<TEntity>().Find(id);   
         }
       
-        public virtual void Add(TEntity entity)
+        public virtual void Insert(TEntity entity)
         {
             _context.Add(entity);
             _context.SaveChanges();
@@ -47,6 +47,11 @@ namespace JarmuKolcsonzo.Repositories
                 _context.Remove(entity);
                 _context.SaveChanges();
             }
+        }
+
+        public virtual void Save()
+        {
+            _context.SaveChanges();
         }
     }
 }
