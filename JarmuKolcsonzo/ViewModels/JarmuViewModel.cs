@@ -16,7 +16,7 @@ namespace JarmuKolcsonzo.ViewModels
     public class JarmuViewModel : PagerViewModel
     {
         private JarmuRepository jarmuRepo;
-        private GenericRepository<JarmuTipus,JKContext> jarmuTipusRepo;
+        private JarmuTipusRepository jarmuTipusRepo;
         private ObservableCollection<Jarmu> _jarmuvek;
         public ObservableCollection<Jarmu> Jarmuvek
         {
@@ -40,7 +40,7 @@ namespace JarmuKolcsonzo.ViewModels
         {
             var context = new JKContext();
             jarmuRepo = new JarmuRepository(context);
-            jarmuTipusRepo = new GenericRepository<JarmuTipus,JKContext>(context);
+            jarmuTipusRepo = new JarmuTipusRepository(context);
             NewCommand = new RelayCommand(() => New());
             SaveCmd = new RelayCommand(() => Save(SelectedJarmu));
             DeleteCmd = new RelayCommand(() => Delete(SelectedJarmu));
