@@ -14,9 +14,9 @@
             <Setter Property="Margin" Value="2" />
         </Style>
     </UserControl.Resources>
-    <!--<UserControl.DataContext>
+    <UserControl.DataContext>
         <vm:JarmuViewModel/>
-    </UserControl.DataContext>-->
+    </UserControl.DataContext>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -70,17 +70,19 @@
                 <DatePicker Grid.Row="3" Grid.Column="1" Width="300" HorizontalAlignment="Left" Margin="2"
                        SelectedDate="{Binding SelectedJarmu.szerviz_datum}"/>
                 <Label Content="Típus" Grid.Row="4" Grid.Column="0"/>
-                <ComboBox Grid.Row="4" Grid.Column="1" Width="300" HorizontalAlignment="Left" Margin="2" />
-                <Button Content="Új" Grid.Column="2" Grid.Row="0"/>
-                <Button Content="Mentés" Grid.Column="2" Grid.Row="1"/>
-                <Button Content="Törlés" Grid.Column="2" Grid.Row="2"/>
+                <ComboBox Grid.Row="4" Grid.Column="1" Width="300" 
+                          HorizontalAlignment="Left" Margin="2"
+                          ItemsSource="{Binding JarmuTipusok}"
+                          SelectedItem="{Binding SelectedJarmu.tipus}"
+                          DisplayMemberPath="megnevezes"/>
+                <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCommand}"/>
+                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}"/>
+                <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}"/>
             </Grid>
         </Expander>
 
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <TextBlock Text="Összesen: "/>
@@ -91,7 +93,7 @@
                           SelectedItem="{Binding ItemsPerPage}">
                 </ComboBox>
             </StackPanel>
-            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="91,0,0,0">
                 <!--<TextBox Width="200" Text="{Binding SearchKey, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" />-->
                 <TextBox Width="200" Text="{Binding SearchKey}" VerticalAlignment="Center" />
                 <Button Content="Keresés" Command="{Binding LoadDataCmd}" />
@@ -99,7 +101,7 @@
         </Grid>
 
         <DataGrid Grid.Row="3" ColumnWidth="*" x:Name="jarmuvekDGV"
-                  ItemsSource="{Binding Jarmuvek}" 
+                  ItemsSource="{Binding Jarmuvek}"
                   SelectedItem="{Binding SelectedJarmu}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"     

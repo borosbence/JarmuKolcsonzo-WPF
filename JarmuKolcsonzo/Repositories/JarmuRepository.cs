@@ -45,12 +45,6 @@ namespace JarmuKolcsonzo.Repositories
             {
                 switch (sortBy)
                 {
-                    case "rendszam":
-                        query = ascending ? query.OrderBy(x => x.rendszam) : query.OrderByDescending(x => x.rendszam);
-                        break;
-                    case "tipus.megnevezes":
-                        query = ascending ? query.OrderBy(x => x.tipus.megnevezes) : query.OrderByDescending(x => x.tipus.megnevezes);
-                        break;
                     case "dij":
                         query = ascending ? query.OrderBy(x => x.dij) : query.OrderByDescending(x => x.dij);
                         break;
@@ -60,7 +54,11 @@ namespace JarmuKolcsonzo.Repositories
                     case "szerviz_datum":
                         query = ascending ? query.OrderBy(x => x.szerviz_datum) : query.OrderByDescending(x => x.szerviz_datum);
                         break;
+                    case "tipus.megnevezes":
+                        query = ascending ? query.OrderBy(x => x.tipus.megnevezes) : query.OrderByDescending(x => x.tipus.megnevezes);
+                        break;
                     default:
+                        query = ascending ? query.OrderBy(x => x.rendszam) : query.OrderByDescending(x => x.rendszam);
                         break;
                 }
             }
@@ -79,6 +77,11 @@ namespace JarmuKolcsonzo.Repositories
         public int TotalItems
         {
             get { return _totalItems; }
+        }
+
+        public bool Exist(int id)
+        {
+            return _context.Jarmuvek.Any(x => x.id == id);
         }
     }
 }
