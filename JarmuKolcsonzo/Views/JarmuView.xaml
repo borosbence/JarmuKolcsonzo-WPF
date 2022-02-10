@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JarmuKolcsonzo.Views"
              xmlns:vm="clr-namespace:JarmuKolcsonzo.ViewModels"
+             xmlns:v="clr-namespace:JarmuKolcsonzo.Validators"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
@@ -38,7 +39,7 @@
                     <Setter Property="HorizontalAlignment" Value="Left"/>
                     <Setter Property="Margin" Value="2"/>
                 </Style>
-                <Style TargetType="Button">
+                <Style TargetType="Button" x:Key="btnStyle">
                     <Setter Property="Width" Value="100"/>
                     <Setter Property="HorizontalAlignment" Value="Right" />
                     <Setter Property="Margin" Value="2" />
@@ -58,14 +59,24 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Rendszám" Grid.Column="0" Grid.Row="0"/>
-                <TextBox Grid.Row="0" Grid.Column="1"
-                       Text="{Binding SelectedJarmu.rendszam}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtRendszam"
+                         Validation.ErrorTemplate="{StaticResource validationErrorTemplate2}">
+                    <TextBox.Text>
+                        <Binding Path="SelectedJarmu.rendszam" UpdateSourceTrigger="PropertyChanged"
+                                 ValidatesOnDataErrors="True">
+                            <Binding.ValidationRules>
+                                <v:RendszamValidator/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <Label Content="Díj" Grid.Row="1" Grid.Column="0"/>
-                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxAge"
+                <TextBox Grid.Row="1" Grid.Column="1"
                        Text="{Binding SelectedJarmu.dij}" />
                 <Label Content="Elérhető" Grid.Row="2" Grid.Column="0" />
-                <CheckBox Grid.Row="2" Grid.Column="1" Margin="2"
-                       IsChecked="{Binding SelectedJarmu.elerheto}"/>
+                <CheckBox Grid.Row="2" Grid.Column="1" Margin="2" 
+                          Width="30" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        IsChecked="{Binding SelectedJarmu.elerheto}"/>
                 <Label Content="Szervíz Dátum" Grid.Row="3" Grid.Column="0" />
                 <DatePicker Grid.Row="3" Grid.Column="1" Width="300" HorizontalAlignment="Left" Margin="2"
                        SelectedDate="{Binding SelectedJarmu.szerviz_datum}"/>
@@ -76,7 +87,24 @@
                           SelectedItem="{Binding SelectedJarmu.tipus}"
                           DisplayMemberPath="megnevezes"/>
                 <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCommand}"/>
-                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}"/>
+                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}">
+                    <Button.Style>
+                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="IsEnabled" Value="false" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding ElementName=txtRendszam, Path=(Validation.HasError)}" Value="false" />
+                                        <!--<Condition Binding="{Binding ElementName=TextBoxLastName, Path=(Validation.HasError)}" Value="false" />
+                                        <Condition Binding="{Binding ElementName=TextBoxAge, Path=(Validation.HasError)}" Value="false" />
+                                        <Condition Binding="{Binding ElementName=TextBoxPhone, Path=(Validation.HasError)}" Value="false" />-->
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="IsEnabled" Value="true" />
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
                 <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}"/>
             </Grid>
         </Expander>
