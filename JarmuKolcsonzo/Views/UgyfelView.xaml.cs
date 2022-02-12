@@ -1,5 +1,7 @@
-﻿using System;
+﻿using JarmuKolcsonzo.ViewModels;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,20 @@ namespace JarmuKolcsonzo.Views
         public UgyfelView()
         {
             InitializeComponent();
+            ugyfelekDGV.Sorting += UgyfelekDGV_Sorting;
         }
+
+        private void UgyfelekDGV_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            DataGridColumn column = e.Column;
+            Vm.SortBy = column.SortMemberPath;
+            // prevent the built-in sort from sorting
+            e.Handled = true;
+            ListSortDirection direction = (column.SortDirection != ListSortDirection.Ascending) ? ListSortDirection.Ascending : ListSortDirection.Descending;
+            //set the sort order on the column
+            column.SortDirection = direction;
+        }
+
+        private UgyfelViewModel Vm => this.DataContext as UgyfelViewModel;
     }
 }
