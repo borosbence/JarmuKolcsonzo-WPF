@@ -4,9 +4,136 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JarmuKolcsonzo.Views"
+             xmlns:vm="clr-namespace:JarmuKolcsonzo.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="2" />
+        </Style>
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <vm:UgyfelViewModel/>
+    </UserControl.DataContext>
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <Label FontSize="24" HorizontalAlignment="Center" Content="Ügyfelek"/>
+        <Expander Grid.Row="1" Header="Ügyfél részletei">
+            <Expander.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="FontSize" Value="13" />
+                </Style>
+                <Style TargetType="TextBox">
+                    <Setter Property="Width" Value="300"/>
+                    <Setter Property="Height" Value="25"/>
+                    <Setter Property="HorizontalAlignment" Value="Left"/>
+                    <Setter Property="Margin" Value="2"/>
+                </Style>
+                <Style TargetType="Button" x:Key="btnStyle">
+                    <Setter Property="Width" Value="100"/>
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="Margin" Value="2" />
+                </Style>
+            </Expander.Resources>
+            <Grid Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Vezetéknév" Grid.Column="0" Grid.Row="0"/>
+                <TextBox Text="{Binding SelectedUgyfel.vezeteknev}" Grid.Row="0" Grid.Column="1"/>
+                <Label Content="Keresztnév" Grid.Column="0" Grid.Row="1"/>
+                <TextBox Text="{Binding SelectedUgyfel.keresztnev}" Grid.Row="1" Grid.Column="1"/>
+                <Label Content="Város" Grid.Column="0" Grid.Row="2"/>
+                <TextBox Text="{Binding SelectedUgyfel.varos}" Grid.Row="2" Grid.Column="1"/>
+                <Label Content="Irányítószám" Grid.Column="0" Grid.Row="3"/>
+                <TextBox Text="{Binding SelectedUgyfel.iranyitoszam}" Grid.Row="3" Grid.Column="1"/>
+                <Label Content="Cím" Grid.Column="0" Grid.Row="4"/>
+                <TextBox Text="{Binding SelectedUgyfel.cim}" Grid.Row="4" Grid.Column="1"/>
+                <Label Content="Telefonszám" Grid.Column="0" Grid.Row="5"/>
+                <TextBox Text="{Binding SelectedUgyfel.telefonszam}" Grid.Row="5" Grid.Column="1"/>
+                <Label Content="Email" Grid.Column="0" Grid.Row="6"/>
+                <TextBox Text="{Binding SelectedUgyfel.email}" Grid.Row="6" Grid.Column="1"/>
+                <Label Content="Pont" Grid.Column="0" Grid.Row="7"/>
+                <TextBox Text="{Binding SelectedUgyfel.pont}" Grid.Row="7" Grid.Column="1"/>
+
+                <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCommand}"/>
+                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}"/>
+                <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}"/>
+            </Grid>
+        </Expander>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="Összesen: "/>
+                <TextBlock Text="{Binding TotalItems}"/>
+                <TextBlock Text=", elem per oldal: "/>
+                <ComboBox Width="100" VerticalAlignment="Top"
+                          ItemsSource="{Binding IPPList}"
+                          SelectedItem="{Binding ItemsPerPage}">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Right">
+                <TextBox Width="200" Text="{Binding SearchKey}" VerticalAlignment="Center" />
+                <Button Content="Keresés" Command="{Binding LoadDataCmd}" />
+            </StackPanel>
+        </Grid>
+
+        <DataGrid Grid.Row="3" ColumnWidth="*" x:Name="ugyfelekDGV"
+                  ItemsSource="{Binding Ugyfelek}"
+                  SelectedItem="{Binding SelectedUgyfel}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"     
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"              
+                  SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Vezetéknév" Binding="{Binding vezeteknev}"/>
+                <DataGridTextColumn Header="Keresztnév" Binding="{Binding keresztnev}"/>
+                <DataGridTextColumn Header="Város" Binding="{Binding varos}"/>
+                <DataGridTextColumn Header="Irányítószám" Binding="{Binding iranyitoszam}"/>
+                <DataGridTextColumn Header="Cím" Binding="{Binding cim}"/>
+                <DataGridTextColumn Header="Cím" Binding="{Binding cim}"/>
+                <DataGridTextColumn Header="Telefonszám" Binding="{Binding telefonszam}"/>
+                <DataGridTextColumn Header="Email" Binding="{Binding email}"/>
+                <DataGridTextColumn Header="Pont" Binding="{Binding pont}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="5" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="&lt;&lt;" Grid.Column="0"  Command="{Binding FirstPageCmd}" />
+            <Button Content="&lt;" Grid.Column="1" Command="{Binding PreviousPageCmd}" />
+            <TextBlock Text="{Binding CurrentPage}" Grid.Column="2" HorizontalAlignment="Center"/>
+            <Button Content=">" Grid.Column="3" Command="{Binding NextPageCmd}" />
+            <Button Content=">>" Grid.Column="4" Command="{Binding LastPageCmd}" />
+        </Grid>
     </Grid>
 </UserControl>
