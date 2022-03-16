@@ -1,39 +1,40 @@
-﻿using JarmuKolcsonzo.Models;
+﻿using JarmuKolcsonzo.Commands;
+using JarmuKolcsonzo.Models;
 using JarmuKolcsonzo.Repositories;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace JarmuKolcsonzo.ViewModels
 {
-    public class UgyfelViewModel : PagerViewModel
+    public class UgyfelViewModel : PagerViewModel, IEditCommands<Ugyfel>
     {
         private UgyfelRepository ugyfelRepo;
+
         private ObservableCollection<Ugyfel> _ugyfelek;
         public ObservableCollection<Ugyfel> Ugyfelek
         {
             get { return _ugyfelek; }
             set { SetProperty(ref _ugyfelek, value); }
         }
+
         private Ugyfel _selectedUgyfel = new Ugyfel();
         public Ugyfel SelectedUgyfel
         {
             get { return _selectedUgyfel; }
-            set { SetProperty(ref _selectedUgyfel, value); }
+            set { SetProperty(ref _selectedUgyfel, value); DeleteCmd.NotifyCanExecuteChanged(); }
         }
 
-        public RelayCommand NewCommand { get; set; }
-        public RelayCommand SaveCmd { get; set; }
-        public RelayCommand DeleteCmd { get; set; }
+        public RelayCommand<Ugyfel> NewCmd { get; }
+        public RelayCommand<Ugyfel> SaveCmd { get; }
+        public RelayCommand<Ugyfel> DeleteCmd { get; }
 
         public UgyfelViewModel()
         {
             var context = new JKContext();
             ugyfelRepo = new UgyfelRepository(context);
-            NewCommand = new RelayCommand(() => New());
-            SaveCmd = new RelayCommand(() => Save(SelectedUgyfel));
-            DeleteCmd = new RelayCommand(() => Delete(SelectedUgyfel));
+            NewCmd = new RelayCommand<Ugyfel>(New);
+            SaveCmd = new RelayCommand<Ugyfel>(ugyfel => Save(ugyfel));
+            DeleteCmd = new RelayCommand<Ugyfel>(ugyfel => Delete(ugyfel), CanDelete);
             LoadData();
         }
 
@@ -44,9 +45,10 @@ namespace JarmuKolcsonzo.ViewModels
             Ugyfelek = new ObservableCollection<Ugyfel>(query);
         }
 
-        private void New()
+        private void New(Ugyfel ugyfel)
         {
-            SelectedUgyfel = new Ugyfel();
+            ugyfel = new Ugyfel();
+            SelectedUgyfel = ugyfel;
         }
 
         private void Save(Ugyfel ugyfel)
@@ -60,6 +62,16 @@ namespace JarmuKolcsonzo.ViewModels
                 ugyfelRepo.Insert(ugyfel);
                 Ugyfelek.Insert(0, ugyfel);
             }
+        }
+
+        private bool CanDelete(Ugyfel ugyfel)
+        {
+            // return ugyfel != null;
+            if (ugyfel != null)
+            {
+                return ugyfel.id > 0;
+            }
+            return false;
         }
 
         private void Delete(Ugyfel ugyfel)

@@ -27,14 +27,20 @@ namespace JarmuKolcsonzo.Repositories
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.ToLower();
+                search = search.Replace('.', ',');
                 // Ha a keresési kulcsszó szám
-                int.TryParse(search, out int szamErtek);
+                decimal.TryParse(search, out decimal szamErtek);
+
+                if (search.Contains('+'))
+                {
+                    szamErtek = 0;
+                }
 
                 if (szamErtek > 0)
                 {
                     query = query.Where(x =>
-                       x.iranyitoszam == szamErtek ||
-                       x.pont == szamErtek);
+                        x.pont == szamErtek ||
+                        x.iranyitoszam == szamErtek);
                 }
                 else
                 {

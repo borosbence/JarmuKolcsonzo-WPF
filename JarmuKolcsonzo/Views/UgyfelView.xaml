@@ -76,9 +76,9 @@
                 <Label Content="Pont" Grid.Column="0" Grid.Row="7"/>
                 <TextBox Text="{Binding SelectedUgyfel.pont}" Grid.Row="7" Grid.Column="1"/>
 
-                <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCommand}"/>
-                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}"/>
-                <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}"/>
+                <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCmd}" CommandParameter="{Binding SelectedUgyfel}"/>
+                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}" CommandParameter="{Binding SelectedUgyfel}"/>
+                <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}" CommandParameter="{Binding SelectedUgyfel}"/>
             </Grid>
         </Expander>
 

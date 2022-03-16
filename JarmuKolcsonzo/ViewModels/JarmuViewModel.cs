@@ -1,14 +1,11 @@
 ﻿using JarmuKolcsonzo.Commands;
 using JarmuKolcsonzo.Models;
 using JarmuKolcsonzo.Repositories;
-using JarmuKolcsonzo.Validators;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
 
 namespace JarmuKolcsonzo.ViewModels
 {
@@ -28,10 +25,7 @@ namespace JarmuKolcsonzo.ViewModels
         public Jarmu SelectedJarmu
         {
             get { return _selectedJarmu; }
-            set { 
-                SetProperty(ref _selectedJarmu, value);
-                DeleteCmd.NotifyCanExecuteChanged();
-            }
+            set { SetProperty(ref _selectedJarmu, value); DeleteCmd.NotifyCanExecuteChanged(); }
         }
 
         public List<JarmuTipus> JarmuTipusok { get; set; }
