@@ -13,7 +13,7 @@ namespace JarmuKolcsonzo.Commands
         RelayCommand<T> SaveCmd { get; }
         RelayCommand<T> DeleteCmd { get; }
 
-        void New() { }
+        void New(T enttiy) { }
         void Save(T entity) { }
         bool CanDelete() { return true; }
         void Delete(T entity) { }
