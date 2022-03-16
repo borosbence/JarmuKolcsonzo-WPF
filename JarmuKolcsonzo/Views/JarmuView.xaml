@@ -86,8 +86,8 @@
                           ItemsSource="{Binding JarmuTipusok}"
                           SelectedItem="{Binding SelectedJarmu.tipus}"
                           DisplayMemberPath="megnevezes"/>
-                <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCommand}"/>
-                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}">
+                <Button Content="Új" Grid.Column="2" Grid.Row="0" Command="{Binding NewCmd}"/>
+                <Button Content="Mentés" Grid.Column="2" Grid.Row="1" Command="{Binding SaveCmd}" CommandParameter="{Binding SelectedJarmu}">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="IsEnabled" Value="false" />
@@ -105,7 +105,7 @@
                         </Style>
                     </Button.Style>
                 </Button>
-                <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}"/>
+                <Button Content="Törlés" Grid.Column="2" Grid.Row="2" Command="{Binding DeleteCmd}" CommandParameter="{Binding SelectedJarmu}"/>
             </Grid>
         </Expander>
 

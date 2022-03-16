@@ -1,49 +1,53 @@
-﻿using JarmuKolcsonzo.Models;
+﻿using JarmuKolcsonzo.Commands;
+using JarmuKolcsonzo.Models;
 using JarmuKolcsonzo.Repositories;
-using Microsoft.Toolkit.Mvvm.ComponentModel;
+using JarmuKolcsonzo.Validators;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
-using System.Windows;
-using System.Windows.Data;
 
 namespace JarmuKolcsonzo.ViewModels
 {
-    public class JarmuViewModel : PagerViewModel
+    public class JarmuViewModel : PagerViewModel, IEditCommands<Jarmu>
     {
         private JarmuRepository jarmuRepo;
         private JarmuTipusRepository jarmuTipusRepo;
+
         private ObservableCollection<Jarmu> _jarmuvek;
         public ObservableCollection<Jarmu> Jarmuvek
         {
             get { return _jarmuvek; }
             set { SetProperty(ref _jarmuvek, value); }
         }
+
         private Jarmu _selectedJarmu = new Jarmu();
         public Jarmu SelectedJarmu
         {
             get { return _selectedJarmu; }
-            set { SetProperty(ref _selectedJarmu, value); }
+            set { 
+                SetProperty(ref _selectedJarmu, value);
+                DeleteCmd.NotifyCanExecuteChanged();
+            }
         }
 
-        public ObservableCollection<JarmuTipus> JarmuTipusok { get; set; }
+        public List<JarmuTipus> JarmuTipusok { get; set; }
 
-        public RelayCommand NewCommand { get; set; }
-        public RelayCommand SaveCmd { get; set; }
-        public RelayCommand DeleteCmd { get; set; }
+        public RelayCommand<Jarmu> NewCmd { get; }
+        public RelayCommand<Jarmu> SaveCmd { get; }
+        public RelayCommand<Jarmu> DeleteCmd { get; }
 
         public JarmuViewModel()
         {
             var context = new JKContext();
             jarmuRepo = new JarmuRepository(context);
             jarmuTipusRepo = new JarmuTipusRepository(context);
-            NewCommand = new RelayCommand(() => New());
-            SaveCmd = new RelayCommand(() => Save(SelectedJarmu));
-            DeleteCmd = new RelayCommand(() => Delete(SelectedJarmu));
+            NewCmd = new RelayCommand<Jarmu>((jarmu) => New(jarmu));
+            SaveCmd = new RelayCommand<Jarmu>(jarmu => Save(jarmu));
+            DeleteCmd = new RelayCommand<Jarmu>(jarmu => Delete(jarmu), CanDelete);
             LoadData();
         }
 
@@ -52,11 +56,12 @@ namespace JarmuKolcsonzo.ViewModels
             var query = jarmuRepo.GetAll(page, ItemsPerPage, SearchKey, SortBy, ascending);
             TotalItems = jarmuRepo.TotalItems;
             Jarmuvek = new ObservableCollection<Jarmu>(query);
-            JarmuTipusok = new ObservableCollection<JarmuTipus>(jarmuTipusRepo.GetAll());
+            JarmuTipusok = jarmuTipusRepo.GetAll();
         }
 
-        private void New()
+        private void New(Jarmu jarmu)
         {
+            jarmu = new Jarmu();
             SelectedJarmu = new Jarmu();
         }
 
@@ -71,6 +76,16 @@ namespace JarmuKolcsonzo.ViewModels
                 jarmuRepo.Insert(jarmu);
                 Jarmuvek.Insert(0, jarmu);
             }
+        }
+
+        private bool CanDelete(Jarmu jarmu)
+        {
+            // return jarmu != null;
+            if (jarmu != null)
+            {
+                return jarmu.id > 0;
+            }
+            return false;
         }
 
         private void Delete(Jarmu jarmu)

@@ -23,7 +23,7 @@ namespace JarmuKolcsonzo.Repositories
             string sortBy = null,
             bool ascending = true)
         {
-            var query = _context.Jarmuvek.Include(x => x.tipus).AsQueryable();
+            var query = _context.Jarmuvek.Include(x => x.tipus).OrderBy(x => x.rendszam).AsQueryable();
             // Keresés
             if (!string.IsNullOrWhiteSpace(search))
             {

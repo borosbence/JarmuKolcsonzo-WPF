@@ -27,10 +27,10 @@
                     <VirtualizingStackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
-            <MenuItem Header="Ügyfelek"  Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel" />
             <MenuItem Header="Járművek" Command="{Binding UpdateViewCommand}" CommandParameter="Jarmu"/>
-            <!--<MenuItem Header="Járműtípusok" />
-            <MenuItem Header="Rendelések" />-->
+            <!-- <MenuItem Header="Járműtípusok" /> -->
+            <MenuItem Header="Ügyfelek"  Command="{Binding UpdateViewCommand}" CommandParameter="Ugyfel" />
+            <!-- <MenuItem Header="Rendelések" /> -->
         </Menu>
         <GridSplitter Grid.Column="1" Width="2" Background="Black" HorizontalAlignment="Stretch" />
         <ContentControl Grid.Column="2" Content="{Binding SelectedViewModel}"/>

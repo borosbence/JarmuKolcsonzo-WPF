@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace JarmuKolcsonzo.ViewModels
 {
@@ -11,7 +10,7 @@ namespace JarmuKolcsonzo.ViewModels
         public string SearchKey
         {
             get { return _searchKey; }
-            set { SetProperty(ref _searchKey, value); page = 1; }
+            set { _searchKey = value; page = 1; }
         }
 
         private string _sortBy;
@@ -20,17 +19,14 @@ namespace JarmuKolcsonzo.ViewModels
             get { return _sortBy; }
             set
             {
-                SetProperty(ref _sortBy, value);
-                if (value == _sortBy)
-                {
-                    ascending = !ascending;
-                }
+                _sortBy = value;
+                ascending = value == _sortBy ? ascending : !ascending;
                 LoadData();
             }
         }
         protected bool ascending;
 
-        // Oldaltördelés
+        #region Oldaltördelés
         private string _currentPage;
         public string CurrentPage
         {
@@ -38,7 +34,7 @@ namespace JarmuKolcsonzo.ViewModels
             set { SetProperty(ref _currentPage, value); }
         }
 
-        public ObservableCollection<int> IPPList { get; set; }
+        public List<int> IPPList { get; }
 
         private int itemsPerPage = 20;
         public int ItemsPerPage
@@ -65,22 +61,23 @@ namespace JarmuKolcsonzo.ViewModels
             }
         }
 
-        public RelayCommand LoadDataCmd { get; set; }
-        public RelayCommand FirstPageCmd { get; set; }
-        public RelayCommand PreviousPageCmd { get; set; }
-        public RelayCommand NextPageCmd { get; set; }
-        public RelayCommand LastPageCmd { get; set; }
+        public RelayCommand FirstPageCmd { get; }
+        public RelayCommand PreviousPageCmd { get; }
+        public RelayCommand NextPageCmd { get; }
+        public RelayCommand LastPageCmd { get; }
+        #endregion
+
+        public RelayCommand LoadDataCmd { get; }
 
         public PagerViewModel()
         {
-            LoadDataCmd = new RelayCommand(() => LoadData());
-            FirstPageCmd = new RelayCommand(() => FirstPage());
-            PreviousPageCmd = new RelayCommand(() => PrevPage());
-            NextPageCmd = new RelayCommand(() => NextPage());
-            LastPageCmd = new RelayCommand(() => LastPage());
-            IPPList = new ObservableCollection<int>(new List<int>() { 10, 20, 50 });
+            LoadDataCmd = new RelayCommand(LoadData);
+            FirstPageCmd = new RelayCommand(FirstPage);
+            PreviousPageCmd = new RelayCommand(PrevPage);
+            NextPageCmd = new RelayCommand(NextPage);
+            LastPageCmd = new RelayCommand(LastPage);
+            IPPList = new List<int>() { 10, 20, 50 };
         }
-
         protected abstract void LoadData();
 
         protected void FirstPage()
@@ -91,7 +88,7 @@ namespace JarmuKolcsonzo.ViewModels
 
         protected void PrevPage()
         {
-            if (page != 1)
+            if (page > 1)
             {
                 page--;
                 LoadData();
@@ -100,7 +97,7 @@ namespace JarmuKolcsonzo.ViewModels
 
         protected void NextPage()
         {
-            if (page != pageCount)
+            if (page < pageCount)
             {
                 page++;
                 LoadData();
